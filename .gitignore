@@ -1,3 +1,7 @@
+# Repository specific
+watchman/config.py
+WIP-*
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
