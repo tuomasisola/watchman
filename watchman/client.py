@@ -22,7 +22,8 @@ def get_site_elements(url):
     ''' Get the ElementTree '''
     r = requests.get(url, headers={'user-agent': CHROME_UA})
     if not r:
-        logging.error(f'Could not fetch: {url}. Status: {r.status_code}')
+        logging.error('Could not fetch: {}. Status: {}'.format(url,
+                                                               r.status_code))
         raise MissingProductError
 
     tree = html.fromstring(r.content)
@@ -32,12 +33,12 @@ def get_site_elements(url):
 def send_tg_message(message, bot_token, chat_id):
     ''' Send given message to chat '''
     base_url = 'https://api.telegram.org'
-    url = base_url + f'/bot{bot_token}/sendMessage'
+    url = base_url + '/bot{}/sendMessage'.format(bot_token)
     payload = {'chat_id': chat_id, 'text': message}
     r = requests.get(url, params=payload)
     if not r:
-        logging.error(f'Could not send a message to chat: {chat_id}. '\
-                      f'Status: {r.status_code}')
+        logging.error('Could not send a message to chat: {}. '\
+                      'Status: {}'.format(chat_id, r.status_code))
         raise InvalidTelegramConnError
 
 '''

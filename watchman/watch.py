@@ -21,39 +21,46 @@ def get_reply(target):
         except BaseException:
             continue
         if target.condition(current_value, target_value):
-            reply.append(f'{title} is now at value {current_value}. '\
-                         f'Check it out!\n\n{url}')
-            logging.info(f'{title} meets the condition, '\
-                          f'now at value: "{current_value}"')
+            reply.append('{} is now at value {}. Check it out!\n\n{}'.format(
+                                                    title, current_value, url))
+            logging.info('{} meets the condition, now at value: "{}"'.format(
+                                                    title, current_value))
         else:
-            logging.info(f'{title} does not meet the given condition. '\
-                         f'Current: "{current_value}", Target: "{target_value}"')
+            logging.info('{} does not meet the given condition. '\
+                         'Current: "{}", Target: "{}"'.format(title,
+                                                current_value, target_value))
     return reply
 
 
 def main():
-    logging.basicConfig(level=logging.INFO)
+    logging_level = logging.INFO
+    logging.basicConfig(filename='watch.log',
+                        filemode='a',
+                        format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
+                        datefmt='%H:%M:%S',
+                        level=logging_level)
 
-    logging.info(f'Loading configurations')
+    logging.info('Loading configurations')
     bot_token = config.TELEGRAM.get('botToken')
     chat_id = config.TELEGRAM.get('chatId')
     target_modules = config.TARGET_MODULES
     if not (bot_token and chat_id and target_modules):
-        logging.error(f'Invalid configurations. BotToken: {bot_token} '
-                        f'ChatId: {chat_id} TargetModules: {target_modules}')
+        logging.error('Invalid configurations. BotToken: {} ChatId: {} '\
+                      'TargetModules: {}'.format(bot_token,
+                                                 chat_id, target_modules))
         sys.exit(0)
 
-    logging.info(f'Starting Watchman for targets {target_modules}')
+    logging.info('Starting Watchman for targets {}'.format(target_modules))
     for module in target_modules:
         try:
-            target = importlib.import_module(f'targets.{module}')
+            target = importlib.import_module('targets.{}'.format(module))
         except ModuleNotFoundError:
-            logging.error(f'Module "{module}" not found!')
+            logging.error('Module "{}" not found!'.format(module))
             continue
 
         reply = get_reply(target)
         if not reply:
-            logging.info(f'No conditions met for {module}')
+            logging.info('No conditions met for {}'.format(module))
             continue
 
         try:
@@ -63,7 +70,7 @@ def main():
             logging.exception('Could not send a message')
             continue
 
-    logging.info(f'Watchman completed')
+    logging.info('Watchman completed')
 
 
 if __name__ == '__main__':

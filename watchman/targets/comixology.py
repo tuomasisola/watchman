@@ -3,7 +3,6 @@ INFO = {
     'products': {
         'Archie-2015-Vol-2/digital-comic/435686': 4,
         'Miles-Morales-Spider-Man-2018-1/digital-comic/720263': 1,
-        'Amazing-Spider-Man-by-Nick-Spencer-Vol-1-Back-To-Basics/digital-comic/712988': 4,
         'Spider-Gwen-Ghost-Spider-2018-1/digital-comic/703387': 1
     }
 }
